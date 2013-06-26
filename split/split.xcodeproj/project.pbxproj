@@ -20,6 +20,8 @@
 		0F02412D177A46E600FA5F0E /* SBGLImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F02412C177A46E600FA5F0E /* SBGLImageViewController.m */; };
 		0F024135177A772200FA5F0E /* SBGLNumberDinersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F024134177A772200FA5F0E /* SBGLNumberDinersViewController.m */; };
 		0F024138177A776000FA5F0E /* SBGLNameDinersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F024137177A776000FA5F0E /* SBGLNameDinersViewController.m */; };
+		0F6DF6B7177AAB920039A38C /* tesseract-ios-lib in Resources */ = {isa = PBXBuildFile; fileRef = 0F6DF6B6177AAB920039A38C /* tesseract-ios-lib */; };
+		0F6DF6B9177AAB9C0039A38C /* tesseract-ios in Resources */ = {isa = PBXBuildFile; fileRef = 0F6DF6B8177AAB9C0039A38C /* tesseract-ios */; };
 		8D2B91D6177A8F1F0080CDC4 /* ImageOCR.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2B91D5177A8F1F0080CDC4 /* ImageOCR.m */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +46,8 @@
 		0F024134177A772200FA5F0E /* SBGLNumberDinersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBGLNumberDinersViewController.m; sourceTree = "<group>"; };
 		0F024136177A776000FA5F0E /* SBGLNameDinersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBGLNameDinersViewController.h; sourceTree = "<group>"; };
 		0F024137177A776000FA5F0E /* SBGLNameDinersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBGLNameDinersViewController.m; sourceTree = "<group>"; };
+		0F6DF6B6177AAB920039A38C /* tesseract-ios-lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "tesseract-ios-lib"; sourceTree = "<group>"; };
+		0F6DF6B8177AAB9C0039A38C /* tesseract-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "tesseract-ios"; sourceTree = "<group>"; };
 		8D2B91D4177A8F1F0080CDC4 /* ImageOCR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageOCR.h; sourceTree = "<group>"; };
 		8D2B91D5177A8F1F0080CDC4 /* ImageOCR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageOCR.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,6 +69,8 @@
 		0F024104177A46E600FA5F0E = {
 			isa = PBXGroup;
 			children = (
+				0F6DF6B8177AAB9C0039A38C /* tesseract-ios */,
+				0F6DF6B6177AAB920039A38C /* tesseract-ios-lib */,
 				0F024116177A46E600FA5F0E /* split */,
 				0F02410F177A46E600FA5F0E /* Frameworks */,
 				0F02410E177A46E600FA5F0E /* Products */,
@@ -187,6 +193,8 @@
 				0F024125177A46E600FA5F0E /* Default@2x.png in Resources */,
 				0F024127177A46E600FA5F0E /* Default-568h@2x.png in Resources */,
 				0F02412A177A46E600FA5F0E /* MainStoryboard.storyboard in Resources */,
+				0F6DF6B7177AAB920039A38C /* tesseract-ios-lib in Resources */,
+				0F6DF6B9177AAB9C0039A38C /* tesseract-ios in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
