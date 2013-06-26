@@ -12,24 +12,22 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I9I-6Y-1K5">
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Confirm">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iy2-pj-Iv3"/>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="I9I-6Y-1K5" secondAttribute="bottom" constant="27" id="P48-d5-OkI"/>
-                            <constraint firstItem="I9I-6Y-1K5" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" type="default" id="zGI-AY-0yI"/>
+                            <constraint firstItem="Iy2-pj-Iv3" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="0bm-1g-IMv"/>
+                            <constraint firstItem="Iy2-pj-Iv3" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="NKF-BU-8Hq"/>
+                            <constraint firstItem="Iy2-pj-Iv3" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="bJX-YP-LQD"/>
+                            <constraint firstItem="Iy2-pj-Iv3" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="qAe-hN-1vJ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="RIk-6w-pnV"/>
+                    <navigationItem key="navigationItem" id="RIk-6w-pnV">
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="r5f-h2-RVP"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="checkImage" destination="Iy2-pj-Iv3" id="aUY-kq-KrS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>

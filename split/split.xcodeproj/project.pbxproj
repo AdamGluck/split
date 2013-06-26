@@ -20,6 +20,8 @@
 		0F02412D177A46E600FA5F0E /* SBGLImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F02412C177A46E600FA5F0E /* SBGLImageViewController.m */; };
 		0F024135177A772200FA5F0E /* SBGLNumberDinersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F024134177A772200FA5F0E /* SBGLNumberDinersViewController.m */; };
 		0F024138177A776000FA5F0E /* SBGLNameDinersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F024137177A776000FA5F0E /* SBGLNameDinersViewController.m */; };
+		0F6DF6B2177A97D20039A38C /* cvs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0F6DF6B0177A97D20039A38C /* cvs.jpg */; };
+		0F6DF6B3177A97D20039A38C /* robust.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0F6DF6B1177A97D20039A38C /* robust.jpg */; };
 		8D2B91CC177A7DA50080CDC4 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 8D2B9135177A7DA50080CDC4 /* .gitignore */; };
 		8D2B91CD177A7DA50080CDC4 /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2B91C9177A7DA50080CDC4 /* liblept.a */; };
 		8D2B91CE177A7DA50080CDC4 /* libtesseract_all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2B91CA177A7DA50080CDC4 /* libtesseract_all.a */; };
@@ -48,6 +50,8 @@
 		0F024134177A772200FA5F0E /* SBGLNumberDinersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBGLNumberDinersViewController.m; sourceTree = "<group>"; };
 		0F024136177A776000FA5F0E /* SBGLNameDinersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBGLNameDinersViewController.h; sourceTree = "<group>"; };
 		0F024137177A776000FA5F0E /* SBGLNameDinersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBGLNameDinersViewController.m; sourceTree = "<group>"; };
+		0F6DF6B0177A97D20039A38C /* cvs.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cvs.jpg; sourceTree = "<group>"; };
+		0F6DF6B1177A97D20039A38C /* robust.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = robust.jpg; sourceTree = "<group>"; };
 		8D2B9135177A7DA50080CDC4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		8D2B9138177A7DA50080CDC4 /* allheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = allheaders.h; sourceTree = "<group>"; };
 		8D2B9139177A7DA50080CDC4 /* alltypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alltypes.h; sourceTree = "<group>"; };
@@ -262,6 +266,8 @@
 		0F024117177A46E600FA5F0E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0F6DF6B0177A97D20039A38C /* cvs.jpg */,
+				0F6DF6B1177A97D20039A38C /* robust.jpg */,
 				8D2B91D0177A7E030080CDC4 /* Tesseract.h */,
 				8D2B91D1177A7E030080CDC4 /* Tesseract.mm */,
 				8D2B9134177A7DA50080CDC4 /* tesseract-ios-lib-master */,
@@ -521,6 +527,8 @@
 				0F02412A177A46E600FA5F0E /* MainStoryboard.storyboard in Resources */,
 				8D2B91CC177A7DA50080CDC4 /* .gitignore in Resources */,
 				8D2B91CF177A7DA50080CDC4 /* README.md in Resources */,
+				0F6DF6B2177A97D20039A38C /* cvs.jpg in Resources */,
+				0F6DF6B3177A97D20039A38C /* robust.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
