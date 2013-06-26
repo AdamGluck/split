@@ -8,12 +8,15 @@
 
 #import "SBGLImageViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ImageOCR.h"
 
 @interface SBGLImageViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate>{
     BOOL highlighted;
+    CGPoint highlightStart;
 }
 
-@property (strong, nonatomic) IBOutlet UIImageView *testImageView;
+
+@property (strong, nonatomic) IBOutlet UITextField *amountField;
 @property (strong, nonatomic) IBOutlet UITableView *nameTable;
 @property (strong, nonatomic) IBOutlet UIImageView *checkImageView;
 @property (strong, nonatomic) NSMutableDictionary * keyPriceValuePeopleWhoOweIt;
@@ -47,6 +50,7 @@
     NSLog(@"view loaded with %@", self.names);
     self.checkImageView.image = [UIImage imageNamed:@"robust.jpg"];
     [self configureTapGestureRecognizer];
+    [self configurePanGestureRecognizer];
     highlighted = NO;
 }
 
@@ -54,6 +58,12 @@
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
     tap.delegate = self;
     [self.checkImageView addGestureRecognizer:tap];
+}
+
+-(void) configurePanGestureRecognizer{
+    UIPanGestureRecognizer * pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(viewPanned:)];
+    pan.delegate = self;
+    [self.checkImageView addGestureRecognizer:pan];
 }
 
 /*
@@ -87,27 +97,56 @@
 
 #pragma mark - UIGestureRecognizer
 
--(void) viewTapped: (UITapGestureRecognizer *) recognizer{
-    NSLog(@"tap recognized");
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
     
-    if (!highlighted){
-        CGPoint location = [recognizer locationInView:self.view];
-        [self createHighlightAtLocation:location];
+    if ([gestureRecognizer class] == [UIPanGestureRecognizer class]){
+        highlightStart = [touch locationInView:self.checkImageView];
+    }
+    
+    return YES;
+}
+
+-(void) viewPanned: (UIPanGestureRecognizer *) recognizer {
+    
+    if (recognizer.state == UIGestureRecognizerStateChanged){
+        CGPoint location = [recognizer locationInView:self.checkImageView];
+        CGSize highlightSize = CGSizeMake(location.x - highlightStart.x, location.y - highlightStart.y);
+        
+        [self createHighlightAtLocation:highlightStart withSize:highlightSize];
+    }
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded){
         self.nameTable.hidden = NO;
         [self.nameTable reloadData];
-    } else if (highlighted){
+        highlighted = YES;
+    }
+    
+    
+}
+-(void) viewTapped: (UITapGestureRecognizer *) recognizer{
+    
+    if (highlighted){
         [self dismissTableView];
     }
         
 }
 
--(void) createHighlightAtLocation: (CGPoint) location{
-    self.activeHighlight = [[UIImageView alloc] initWithFrame:CGRectMake(location.x - 10, location.y - 10, 30 , 20)];
+-(void) createHighlightAtLocation: (CGPoint) location withSize: (CGSize) size{
+    
+    if (_activeHighlight){
+        [_activeHighlight removeFromSuperview];
+        _activeHighlight = nil;
+    }
+    
+    self.activeHighlight = [[UIImageView alloc] initWithFrame:CGRectMake(location.x, location.y, 0, 20)];
+    
     UIColor * highlighter = [UIColor colorWithRed:250.0/255.0 green:245.0/255.0 blue:151.0/255.0 alpha:.6];
     self.activeHighlight.backgroundColor = highlighter;
-    NSLog(@"x == %f, y == %f, width == %f, height == %f", self.activeHighlight.frame.origin.x, self.activeHighlight.frame.origin.y, self.activeHighlight.frame.size.width, self.activeHighlight.frame.size.height);
+    
     [self.view insertSubview:self.activeHighlight aboveSubview:self.checkImageView];
-    highlighted = YES;
+    
+    self.activeHighlight.frame = CGRectMake(self.activeHighlight.frame.origin.x, self.activeHighlight.frame.origin.y, size.width, size.height);
+
 }
 
 
@@ -160,8 +199,13 @@
     
     if (indexPath.section == 0 && highlighted){
         UIImage * image = [self grabImageInHighlightedView];
-        // process image
-        // set field to value of image
+        if (image){
+            NSLog(@"image");
+            ImageOCR * parsedImage = [[ImageOCR alloc] initWithImage:image];
+            self.amountField = (UITextField *)
+            [cell viewWithTag:1];
+            self.amountField.text = [NSString stringWithFormat:@"%@", parsedImage.digitNumber];
+        }
     }
     
     if (indexPath.section == 1){
@@ -185,10 +229,11 @@
 
 -(UIImage *) grabImageInHighlightedView{
     
+    NSLog(@"grab image called");
     UIImage * digitImage = nil;
     
     if (self.activeHighlight){
-        
+        NSLog(@"no active highlight");
         float scale = [[UIScreen mainScreen] scale];
         UIImage * scaledImage = [[self class] imageWithImage:self.checkImageView.image scaledToSize:self.checkImageView.frame.size];
         
@@ -201,7 +246,6 @@
     }
     
 
-    self.testImageView.image = digitImage;
     
     return digitImage;
     
