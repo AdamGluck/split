@@ -57,10 +57,18 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     NSLog(@"view loaded with %@", self.names);
+    
     self.checkImageView.image = [UIImage imageNamed:@"robust.jpg"];
     [self configureTapGestureRecognizer];
     [self configurePanGestureRecognizer];
     highlighted = NO;
+    
+    self.nameTable.backgroundColor = [UIColor clearColor];
+    
+    UIView * footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.nameTable.frame.size.width, 100)];
+    footerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.6f];
+    self.nameTable.tableFooterView = footerView;
+
 }
 
 -(void) configureTapGestureRecognizer{
@@ -167,13 +175,23 @@
     // Navigation logic may go here. Create and push another view controller.
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    if (cell.accessoryType == UITableViewCellAccessoryNone){
-        self.selectedPeople[indexPath.row] = self.names[indexPath.row];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if ((!cell.accessoryView || cell.accessoryView.hidden) && indexPath.section != 0){
+        [self.selectedPeople addObject: self.names[indexPath.row]];
+        
+        if (cell.accessoryView.hidden){
+            cell.accessoryView.hidden = NO;
+        } else {
+            UIImageView *checkmark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
+            checkmark.image = [UIImage imageNamed:@"check-mark-in-white-md.png"];
+            cell.accessoryView = checkmark;
+        }
+        
     } else {
-        [self.selectedPeople removeObjectAtIndex:indexPath.row];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        [self.selectedPeople removeObject: self.names[indexPath.row]];
+        cell.accessoryView.hidden = YES;
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
 }
@@ -208,7 +226,12 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    cell = [self configureCell:cell];
+    UIImageView * backGroundView = [[UIImageView alloc] initWithFrame:cell.frame];
+    backGroundView.backgroundColor = [UIColor blackColor];
+    backGroundView.alpha = .6f;
+    cell.backgroundView = backGroundView;
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.textLabel.textColor = [UIColor whiteColor];
     
     if (indexPath.section == 0 && highlighted){
         UIImage * image = [self grabImageInHighlightedView];
@@ -238,15 +261,6 @@
     UIGraphicsEndImageContext();
     return newImage;
     
-}
-
--(UITableViewCell *) configureCell: (UITableViewCell * ) cell{
-    
-    UIView * backgroundView = [[UIView alloc] initWithFrame:cell.frame];
-    cell.backgroundColor = [UIColor blackColor];
-    cell.backgroundView = backgroundView;
-    
-    return cell;
 }
 
 -(UIImage *) grabImageInHighlightedView{
