@@ -65,7 +65,7 @@
     
     self.nameTable.backgroundColor = [UIColor clearColor];
     
-    UIView * footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.nameTable.frame.size.width, 100)];
+    UIView * footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.nameTable.frame.size.width, self.view.frame.size.height)];
     footerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.6f];
     self.nameTable.tableFooterView = footerView;
 
