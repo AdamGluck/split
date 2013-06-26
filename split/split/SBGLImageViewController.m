@@ -8,10 +8,11 @@
 
 #import "SBGLImageViewController.h"
 
-@interface SBGLImageViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>{
+@interface SBGLImageViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate>{
     BOOL highlighted;
 }
 
+@property (strong, nonatomic) IBOutlet UITableView *nameTable;
 @property (strong, nonatomic) IBOutlet UIImageView *checkImageView;
 @property (strong, nonatomic) NSMutableDictionary * keyPriceValuePeopleWhoOweIt;
 @property (strong, nonatomic) UIView * activeHighlight;
@@ -115,6 +116,11 @@
     }
         
 }
+
+#pragma mark - UITableViewDelegate files
+
+
+#pragma mark - UITableViewDataSource
 
 - (void)didReceiveMemoryWarning
 {
