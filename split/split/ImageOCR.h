@@ -11,7 +11,7 @@
 @interface ImageOCR : NSObject
 
 @property (strong, nonatomic) UIImage *digitImage;
-@property (strong, nonatomic) NSDecimalNumber *digitNumber;
+@property (strong, readonly, nonatomic) NSDecimalNumber *digitNumber;
 
 - (ImageOCR *)initWithImage:(UIImage *)digitImage;
 
