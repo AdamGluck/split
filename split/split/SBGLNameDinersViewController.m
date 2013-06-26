@@ -100,8 +100,9 @@
                 [self.names addObject:textfield.text];
         }
         
+        NSLog(@"segue prepared for");
         ((SBGLImageViewController *) segue.destinationViewController).names = self.names;
-        
+        NSLog(@"done with segue prepare");
     }
     
 }
