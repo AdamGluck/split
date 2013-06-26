@@ -11,8 +11,7 @@
 
 @implementation ImageOCR
 
-//@property (strong, nonatomic) UIImage *digitImage;
-//@property (strong, nonatomic) NSNumber *digitNumber;
+@synthesize digitNumber = _digitNumber;
 
 - (ImageOCR *)initWithImage:(UIImage *)digitImage
 {
@@ -23,20 +22,23 @@
     return self;
 }
 
+/*
+Takes an image, and parses it using the Tesseract OCR library.
+Assumes the image encodes one price. 
+*/
 - (NSDecimalNumber *)parseImage:(UIImage *)digitImage
 {
     Tesseract* tesseract = [[Tesseract alloc] initWithDataPath:@"tessdata" language:@"eng"];
     [tesseract setVariableValue:@"0123456789." forKey:@"tessedit_char_whitelist"];
+    // POSSIBLE ENHANCEMENT
+    // Set a variable value such that tesseract knows to only expect one line of text. 
     [tesseract setImage:self.digitImage];
     BOOL isRecognized = [tesseract recognize];
     if (isRecognized) {
         NSString *recognizedText = [tesseract recognizedText];
         NSLog(@"%@", recognizedText);
-//        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-//        [f setNumberStyle:NSNumberFormatterDecimalStyle];
-//        NSNumber *myNumber = [f numberFromString:recognizedText];
         NSDecimalNumber *price = [NSDecimalNumber decimalNumberWithString:recognizedText];
-//        NSDecimalNumberHandler *handler = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain scale:-2 raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];        
+     
         if (price) {
             return price;
         } else {
@@ -58,15 +60,12 @@
 
 - (NSDecimalNumber *)digitNumber
 {
-    if (!_digitNumber) _digitNumber = [[NSDecimalNumber alloc] init];
+    if (!_digitNumber) _digitNumber = [self parseImage:self.digitImage];
+
     return _digitNumber;
 }
 
-- (NSNumber *)setDigitNumber
-{
-    _digitNumber = [self parseImage:self.digitImage];
-    return _digitNumber;
-}
+
 
 
 
