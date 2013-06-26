@@ -38,8 +38,10 @@ Assumes the image encodes one price.
         NSString *recognizedText = [tesseract recognizedText];
         NSLog(@"%@", recognizedText);
         NSDecimalNumber *price = [NSDecimalNumber decimalNumberWithString:recognizedText];
-     
+    
         if (price) {
+            NSDecimalNumberHandler *handler = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain scale:-2 raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];
+            
             return price;
         } else {
             return nil;
