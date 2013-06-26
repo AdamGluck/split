@@ -27,6 +27,7 @@
 		0F603436177AAD98005D33A5 /* liblept.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F60342F177AAD98005D33A5 /* liblept.a */; };
 		0F603437177AAD98005D33A5 /* libtesseract_all.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F603430177AAD98005D33A5 /* libtesseract_all.a */; };
 		0F603438177AAD98005D33A5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0F603431177AAD98005D33A5 /* README.md */; };
+		0F60343A177AC67D005D33A5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F603439177AC67D005D33A5 /* QuartzCore.framework */; };
 		8D2B91D6177A8F1F0080CDC4 /* ImageOCR.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2B91D5177A8F1F0080CDC4 /* ImageOCR.m */; };
 /* End PBXBuildFile section */
 
@@ -202,6 +203,7 @@
 		0F60342F177AAD98005D33A5 /* liblept.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblept.a; sourceTree = "<group>"; };
 		0F603430177AAD98005D33A5 /* libtesseract_all.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtesseract_all.a; sourceTree = "<group>"; };
 		0F603431177AAD98005D33A5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		0F603439177AC67D005D33A5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D2B91D4177A8F1F0080CDC4 /* ImageOCR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageOCR.h; sourceTree = "<group>"; };
 		8D2B91D5177A8F1F0080CDC4 /* ImageOCR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageOCR.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -211,6 +213,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F60343A177AC67D005D33A5 /* QuartzCore.framework in Frameworks */,
 				0F024111177A46E600FA5F0E /* UIKit.framework in Frameworks */,
 				0F024113177A46E600FA5F0E /* Foundation.framework in Frameworks */,
 				0F024115177A46E600FA5F0E /* CoreGraphics.framework in Frameworks */,
@@ -225,6 +228,7 @@
 		0F024104177A46E600FA5F0E = {
 			isa = PBXGroup;
 			children = (
+				0F603439177AC67D005D33A5 /* QuartzCore.framework */,
 				0F603394177AAD98005D33A5 /* tesseract-ios */,
 				0F60339A177AAD98005D33A5 /* tesseract-ios-lib */,
 				0F024116177A46E600FA5F0E /* split */,

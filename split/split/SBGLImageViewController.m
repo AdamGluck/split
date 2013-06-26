@@ -7,15 +7,17 @@
 //
 
 #import "SBGLImageViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface SBGLImageViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate>{
     BOOL highlighted;
 }
 
+@property (strong, nonatomic) IBOutlet UIImageView *testImageView;
 @property (strong, nonatomic) IBOutlet UITableView *nameTable;
 @property (strong, nonatomic) IBOutlet UIImageView *checkImageView;
 @property (strong, nonatomic) NSMutableDictionary * keyPriceValuePeopleWhoOweIt;
-@property (strong, nonatomic) UIView * activeHighlight;
+@property (strong, nonatomic) UIImageView * activeHighlight;
 
 @end
 
@@ -51,7 +53,7 @@
 -(void) configureTapGestureRecognizer{
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
     tap.delegate = self;
-    [self.view addGestureRecognizer:tap];
+    [self.checkImageView addGestureRecognizer:tap];
 }
 
 /*
@@ -91,36 +93,128 @@
     if (!highlighted){
         CGPoint location = [recognizer locationInView:self.view];
         [self createHighlightAtLocation:location];
+        self.nameTable.hidden = NO;
+        [self.nameTable reloadData];
     } else if (highlighted){
-        [self grabImageInHighlightedView];
+        [self dismissTableView];
     }
         
 }
 
 -(void) createHighlightAtLocation: (CGPoint) location{
-    self.activeHighlight = [[UIView alloc] initWithFrame:CGRectMake(location.x - 10, location.y - 10, 30, 20)];
+    self.activeHighlight = [[UIImageView alloc] initWithFrame:CGRectMake(location.x - 10, location.y - 10, 30 , 20)];
     UIColor * highlighter = [UIColor colorWithRed:250.0/255.0 green:245.0/255.0 blue:151.0/255.0 alpha:.6];
     self.activeHighlight.backgroundColor = highlighter;
+    NSLog(@"x == %f, y == %f, width == %f, height == %f", self.activeHighlight.frame.origin.x, self.activeHighlight.frame.origin.y, self.activeHighlight.frame.size.width, self.activeHighlight.frame.size.height);
     [self.view insertSubview:self.activeHighlight aboveSubview:self.checkImageView];
     highlighted = YES;
 }
 
--(void) grabImageInHighlightedView{
-    
-    if (highlighted){
-        UIImage * digitImage = [UIImage imageWithCGImage:CGImageCreateWithImageInRect([self.checkImageView.image CGImage], self.activeHighlight.frame)];
-        self.keyPriceValuePeopleWhoOweIt[@"name"] = digitImage;
-        [self.activeHighlight removeFromSuperview];
-        highlighted = NO;
 
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Navigation logic may go here. Create and push another view controller.
+    UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell.accessoryType == UITableViewCellAccessoryNone){
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
-        
+    
+    
 }
 
-#pragma mark - UITableViewDelegate files
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    
+    if (section == 0)
+        return 1;
+    else
+        return [self.names count];
+    
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *CellIdentifier = @"nameCell";
+
+    if (indexPath.section == 0){
+        CellIdentifier = @"amount";
+    }
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    if (indexPath.section == 0 && highlighted){
+        UIImage * image = [self grabImageInHighlightedView];
+        // process image
+        // set field to value of image
+    }
+    
+    if (indexPath.section == 1){
+        cell.textLabel.text = self.names[indexPath.row];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    
+    return cell;
+}
+
+#pragma mark - UITableView utility functions
+
++ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, YES, [UIScreen mainScreen].scale);
+    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+    
+}
+
+-(UIImage *) grabImageInHighlightedView{
+    
+    UIImage * digitImage = nil;
+    
+    if (self.activeHighlight){
+        
+        float scale = [[UIScreen mainScreen] scale];
+        UIImage * scaledImage = [[self class] imageWithImage:self.checkImageView.image scaledToSize:self.checkImageView.frame.size];
+        
+        CGImageRef image = CGImageCreateWithImageInRect(scaledImage.CGImage, CGRectMake(self.activeHighlight.frame.origin.x * scale, self.activeHighlight.frame.origin.y * scale, self.activeHighlight.frame.size.width * scale, self.activeHighlight.frame.size.height * scale));
+        
+        digitImage = [UIImage imageWithCGImage:image];
+
+        CGImageRelease(image);
+        
+    }
+    
+
+    self.testImageView.image = digitImage;
+    
+    return digitImage;
+    
+}
 
 
-#pragma mark - UITableViewDataSource
+
+-(void) dismissTableView{
+    self.nameTable.hidden = YES;
+    [self.activeHighlight removeFromSuperview];
+    highlighted = NO;
+}
+
 
 - (void)didReceiveMemoryWarning
 {
