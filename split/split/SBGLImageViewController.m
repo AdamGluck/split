@@ -19,7 +19,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *amountField;
 @property (strong, nonatomic) IBOutlet UITableView *nameTable;
 @property (strong, nonatomic) IBOutlet UIImageView *checkImageView;
-@property (strong, nonatomic) NSMutableDictionary * keyPriceValuePeopleWhoOweIt;
+@property (strong, nonatomic) NSMutableArray * items; // each item is a dictionary key = price, value = array of people
+@property (strong, nonatomic) NSMutableArray * selectedPeople;
 @property (strong, nonatomic) UIImageView * activeHighlight;
 
 @end
@@ -27,7 +28,8 @@
 @implementation SBGLImageViewController
 
 @synthesize names = _names;
-@synthesize keyPriceValuePeopleWhoOweIt = _keyPriceValuePeopleWhoOweIt;
+@synthesize items = _items;
+@synthesize selectedPeople = _selectedPeople;
 
 -(NSArray *) names {
     if (!_names)
@@ -36,11 +38,18 @@
     return _names;
 }
 
--(NSMutableDictionary *) keyPriceValuePeopleWhoOweIt{
-    if (!_keyPriceValuePeopleWhoOweIt)
-        _keyPriceValuePeopleWhoOweIt = [[NSMutableDictionary alloc] init];
+-(NSMutableArray *) items {
+    if (!_items)
+        _items = [[NSMutableArray alloc] init];
     
-    return _keyPriceValuePeopleWhoOweIt;
+    return _items;
+}
+
+-(NSMutableArray *) selectedPeople{
+    if (!_selectedPeople)
+        _selectedPeople = [[NSMutableArray alloc] init];
+    
+    return _selectedPeople;
 }
 
 - (void)viewDidLoad
@@ -159,8 +168,10 @@
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if (cell.accessoryType == UITableViewCellAccessoryNone){
+        self.selectedPeople[indexPath.row] = self.names[indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
+        [self.selectedPeople removeObjectAtIndex:indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
@@ -197,6 +208,8 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    cell = [self configureCell:cell];
+    
     if (indexPath.section == 0 && highlighted){
         UIImage * image = [self grabImageInHighlightedView];
         if (image){
@@ -227,13 +240,20 @@
     
 }
 
+-(UITableViewCell *) configureCell: (UITableViewCell * ) cell{
+    
+    UIView * backgroundView = [[UIView alloc] initWithFrame:cell.frame];
+    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundView = backgroundView;
+    
+    return cell;
+}
+
 -(UIImage *) grabImageInHighlightedView{
     
-    NSLog(@"grab image called");
     UIImage * digitImage = nil;
     
     if (self.activeHighlight){
-        NSLog(@"no active highlight");
         float scale = [[UIScreen mainScreen] scale];
         UIImage * scaledImage = [[self class] imageWithImage:self.checkImageView.image scaledToSize:self.checkImageView.frame.size];
         
@@ -245,8 +265,6 @@
         
     }
     
-
-    
     return digitImage;
     
 }
@@ -254,9 +272,36 @@
 
 
 -(void) dismissTableView{
+    
+    NSLog(@"dismiss table view called");
+    
+    // grab relevent data and add it to self.items which will be sent to model
+    
+    NSString * priceForItem = self.amountField.text;
+    
+    NSLog(@"priceForItem %@", priceForItem);
+    NSArray * selectedPeopleForItem = [self.selectedPeople copy];
+    
+    NSLog(@"selected people for item %@", selectedPeopleForItem);
+    
+    NSDictionary * itemPersonMap = @{priceForItem: selectedPeopleForItem};
+    
+    NSLog(@"itemPersonMap = %@", itemPersonMap);
+    
+    [self.items addObject:itemPersonMap];
+    
+    // clear out self.selectedPeople so that we do not keep adding to it
+    
+    [self.selectedPeople removeAllObjects];
+    
+    // clean up table
     self.nameTable.hidden = YES;
     [self.activeHighlight removeFromSuperview];
     highlighted = NO;
+    
+    [self.nameTable reloadData];
+    
+    NSLog(@"itemPersonMap = %@", self.items);
 }
 
 
