@@ -13,21 +13,21 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iy2-pj-Iv3"/>
-                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="myY-ti-O5s">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="myY-ti-O5s">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="186" id="Xng-mi-925"/>
                                     <constraint firstAttribute="height" constant="252" id="k0M-ZW-BhN"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="amount" id="aXc-bM-opu">
+                                    <tableViewCell opaque="NO" alpha="0.60000000000000009" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="amount" id="aXc-bM-opu">
                                         <rect key="frame" x="0.0" y="22" width="186" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="186" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="di2-DF-nqd">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="di2-DF-nqd">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="72" id="Y6y-C1-WD5"/>
                                                         <constraint firstAttribute="height" constant="30" id="vtw-eh-iLW"/>
@@ -47,6 +47,7 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="GME-bl-jEp" firstAttribute="baseline" secondItem="di2-DF-nqd" secondAttribute="baseline" type="default" id="GOo-Zn-Wee"/>
                                             <constraint firstAttribute="trailing" secondItem="di2-DF-nqd" secondAttribute="trailing" constant="10" id="LLJ-1k-ySb"/>
@@ -78,22 +79,14 @@
                                     <outlet property="delegate" destination="2" id="OMP-Q6-Qqn"/>
                                 </connections>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W8h-lW-COp">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="87" id="pet-hl-4R5"/>
-                                    <constraint firstAttribute="width" constant="240" id="ukN-zV-C1w"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Iy2-pj-Iv3" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="0bm-1g-IMv"/>
                             <constraint firstItem="myY-ti-O5s" firstAttribute="top" secondItem="3" secondAttribute="top" constant="90" id="EeK-bA-Kve"/>
-                            <constraint firstItem="W8h-lW-COp" firstAttribute="centerX" secondItem="Iy2-pj-Iv3" secondAttribute="centerX" type="default" id="G87-Vv-Ulm"/>
                             <constraint firstItem="myY-ti-O5s" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Mw5-iE-OrL"/>
                             <constraint firstItem="Iy2-pj-Iv3" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="NKF-BU-8Hq"/>
                             <constraint firstItem="Iy2-pj-Iv3" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="bJX-YP-LQD"/>
-                            <constraint firstItem="W8h-lW-COp" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="enU-gs-kQG"/>
                             <constraint firstItem="Iy2-pj-Iv3" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="qAe-hN-1vJ"/>
                         </constraints>
                     </view>
@@ -103,7 +96,6 @@
                     <connections>
                         <outlet property="checkImageView" destination="Iy2-pj-Iv3" id="1Kj-32-Z3d"/>
                         <outlet property="nameTable" destination="myY-ti-O5s" id="IoS-2m-W2P"/>
-                        <outlet property="testImageView" destination="W8h-lW-COp" id="UVL-mz-VUL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -282,28 +274,6 @@
             <point key="canvasLocation" x="-1617" y="8"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="SBGLImageViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SBGLImageViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="checkImageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="nameTable" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="testImageView" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="SBGLNameDinersViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SBGLNameDinersViewController.h"/>
-        </class>
-        <class className="SBGLNumberDinersViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SBGLNumberDinersViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="numberField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

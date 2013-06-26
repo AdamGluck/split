@@ -8,15 +8,19 @@
 
 #import "SBGLImageViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ImageOCR.h"
 
 @interface SBGLImageViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate>{
     BOOL highlighted;
+    CGPoint highlightStart;
 }
 
-@property (strong, nonatomic) IBOutlet UIImageView *testImageView;
+
+@property (strong, nonatomic) IBOutlet UITextField *amountField;
 @property (strong, nonatomic) IBOutlet UITableView *nameTable;
 @property (strong, nonatomic) IBOutlet UIImageView *checkImageView;
-@property (strong, nonatomic) NSMutableDictionary * keyPriceValuePeopleWhoOweIt;
+@property (strong, nonatomic) NSMutableArray * items; // each item is a dictionary key = price, value = array of people
+@property (strong, nonatomic) NSMutableArray * selectedPeople;
 @property (strong, nonatomic) UIImageView * activeHighlight;
 
 @end
@@ -24,7 +28,8 @@
 @implementation SBGLImageViewController
 
 @synthesize names = _names;
-@synthesize keyPriceValuePeopleWhoOweIt = _keyPriceValuePeopleWhoOweIt;
+@synthesize items = _items;
+@synthesize selectedPeople = _selectedPeople;
 
 -(NSArray *) names {
     if (!_names)
@@ -33,11 +38,18 @@
     return _names;
 }
 
--(NSMutableDictionary *) keyPriceValuePeopleWhoOweIt{
-    if (!_keyPriceValuePeopleWhoOweIt)
-        _keyPriceValuePeopleWhoOweIt = [[NSMutableDictionary alloc] init];
+-(NSMutableArray *) items {
+    if (!_items)
+        _items = [[NSMutableArray alloc] init];
     
-    return _keyPriceValuePeopleWhoOweIt;
+    return _items;
+}
+
+-(NSMutableArray *) selectedPeople{
+    if (!_selectedPeople)
+        _selectedPeople = [[NSMutableArray alloc] init];
+    
+    return _selectedPeople;
 }
 
 - (void)viewDidLoad
@@ -47,6 +59,7 @@
     NSLog(@"view loaded with %@", self.names);
     self.checkImageView.image = [UIImage imageNamed:@"robust.jpg"];
     [self configureTapGestureRecognizer];
+    [self configurePanGestureRecognizer];
     highlighted = NO;
 }
 
@@ -54,6 +67,12 @@
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
     tap.delegate = self;
     [self.checkImageView addGestureRecognizer:tap];
+}
+
+-(void) configurePanGestureRecognizer{
+    UIPanGestureRecognizer * pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(viewPanned:)];
+    pan.delegate = self;
+    [self.checkImageView addGestureRecognizer:pan];
 }
 
 /*
@@ -87,27 +106,56 @@
 
 #pragma mark - UIGestureRecognizer
 
--(void) viewTapped: (UITapGestureRecognizer *) recognizer{
-    NSLog(@"tap recognized");
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
     
-    if (!highlighted){
-        CGPoint location = [recognizer locationInView:self.view];
-        [self createHighlightAtLocation:location];
+    if ([gestureRecognizer class] == [UIPanGestureRecognizer class]){
+        highlightStart = [touch locationInView:self.checkImageView];
+    }
+    
+    return YES;
+}
+
+-(void) viewPanned: (UIPanGestureRecognizer *) recognizer {
+    
+    if (recognizer.state == UIGestureRecognizerStateChanged){
+        CGPoint location = [recognizer locationInView:self.checkImageView];
+        CGSize highlightSize = CGSizeMake(location.x - highlightStart.x, location.y - highlightStart.y);
+        
+        [self createHighlightAtLocation:highlightStart withSize:highlightSize];
+    }
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded){
         self.nameTable.hidden = NO;
         [self.nameTable reloadData];
-    } else if (highlighted){
+        highlighted = YES;
+    }
+    
+    
+}
+-(void) viewTapped: (UITapGestureRecognizer *) recognizer{
+    
+    if (highlighted){
         [self dismissTableView];
     }
         
 }
 
--(void) createHighlightAtLocation: (CGPoint) location{
-    self.activeHighlight = [[UIImageView alloc] initWithFrame:CGRectMake(location.x - 10, location.y - 10, 30 , 20)];
+-(void) createHighlightAtLocation: (CGPoint) location withSize: (CGSize) size{
+    
+    if (_activeHighlight){
+        [_activeHighlight removeFromSuperview];
+        _activeHighlight = nil;
+    }
+    
+    self.activeHighlight = [[UIImageView alloc] initWithFrame:CGRectMake(location.x, location.y, 0, 20)];
+    
     UIColor * highlighter = [UIColor colorWithRed:250.0/255.0 green:245.0/255.0 blue:151.0/255.0 alpha:.6];
     self.activeHighlight.backgroundColor = highlighter;
-    NSLog(@"x == %f, y == %f, width == %f, height == %f", self.activeHighlight.frame.origin.x, self.activeHighlight.frame.origin.y, self.activeHighlight.frame.size.width, self.activeHighlight.frame.size.height);
+    
     [self.view insertSubview:self.activeHighlight aboveSubview:self.checkImageView];
-    highlighted = YES;
+    
+    self.activeHighlight.frame = CGRectMake(self.activeHighlight.frame.origin.x, self.activeHighlight.frame.origin.y, size.width, size.height);
+
 }
 
 
@@ -120,8 +168,10 @@
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if (cell.accessoryType == UITableViewCellAccessoryNone){
+        self.selectedPeople[indexPath.row] = self.names[indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
+        [self.selectedPeople removeObjectAtIndex:indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
@@ -158,10 +208,17 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    cell = [self configureCell:cell];
+    
     if (indexPath.section == 0 && highlighted){
         UIImage * image = [self grabImageInHighlightedView];
-        // process image
-        // set field to value of image
+        if (image){
+            NSLog(@"image");
+            ImageOCR * parsedImage = [[ImageOCR alloc] initWithImage:image];
+            self.amountField = (UITextField *)
+            [cell viewWithTag:1];
+            self.amountField.text = [NSString stringWithFormat:@"%@", parsedImage.digitNumber];
+        }
     }
     
     if (indexPath.section == 1){
@@ -183,12 +240,20 @@
     
 }
 
+-(UITableViewCell *) configureCell: (UITableViewCell * ) cell{
+    
+    UIView * backgroundView = [[UIView alloc] initWithFrame:cell.frame];
+    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundView = backgroundView;
+    
+    return cell;
+}
+
 -(UIImage *) grabImageInHighlightedView{
     
     UIImage * digitImage = nil;
     
     if (self.activeHighlight){
-        
         float scale = [[UIScreen mainScreen] scale];
         UIImage * scaledImage = [[self class] imageWithImage:self.checkImageView.image scaledToSize:self.checkImageView.frame.size];
         
@@ -200,9 +265,6 @@
         
     }
     
-
-    self.testImageView.image = digitImage;
-    
     return digitImage;
     
 }
@@ -210,9 +272,36 @@
 
 
 -(void) dismissTableView{
+    
+    NSLog(@"dismiss table view called");
+    
+    // grab relevent data and add it to self.items which will be sent to model
+    
+    NSString * priceForItem = self.amountField.text;
+    
+    NSLog(@"priceForItem %@", priceForItem);
+    NSArray * selectedPeopleForItem = [self.selectedPeople copy];
+    
+    NSLog(@"selected people for item %@", selectedPeopleForItem);
+    
+    NSDictionary * itemPersonMap = @{priceForItem: selectedPeopleForItem};
+    
+    NSLog(@"itemPersonMap = %@", itemPersonMap);
+    
+    [self.items addObject:itemPersonMap];
+    
+    // clear out self.selectedPeople so that we do not keep adding to it
+    
+    [self.selectedPeople removeAllObjects];
+    
+    // clean up table
     self.nameTable.hidden = YES;
     [self.activeHighlight removeFromSuperview];
     highlighted = NO;
+    
+    [self.nameTable reloadData];
+    
+    NSLog(@"itemPersonMap = %@", self.items);
 }
 
 
