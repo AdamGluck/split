@@ -50,6 +50,8 @@
 		8D2B9330177AD06D0080CDC4 /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2B932B177AD06D0080CDC4 /* libtiff.a */; };
 		8D2B9331177AD06D0080CDC4 /* libMagickCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2B932C177AD06D0080CDC4 /* libMagickCore.a */; };
 		8D2B9332177AD06D0080CDC4 /* libMagickWand.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2B932D177AD06D0080CDC4 /* libMagickWand.a */; };
+		8D2B9335177B5E990080CDC4 /* MealItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2B9334177B5E990080CDC4 /* MealItem.m */; };
+		8D2B9338177B73C40080CDC4 /* Check.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2B9337177B73C30080CDC4 /* Check.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -377,6 +379,10 @@
 		8D2B932B177AD06D0080CDC4 /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtiff.a; sourceTree = "<group>"; };
 		8D2B932C177AD06D0080CDC4 /* libMagickCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMagickCore.a; sourceTree = "<group>"; };
 		8D2B932D177AD06D0080CDC4 /* libMagickWand.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMagickWand.a; sourceTree = "<group>"; };
+		8D2B9333177B5E990080CDC4 /* MealItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealItem.h; sourceTree = "<group>"; };
+		8D2B9334177B5E990080CDC4 /* MealItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealItem.m; sourceTree = "<group>"; };
+		8D2B9336177B73C30080CDC4 /* Check.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Check.h; sourceTree = "<group>"; };
+		8D2B9337177B73C30080CDC4 /* Check.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Check.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -470,6 +476,10 @@
 			children = (
 				8D2B91D4177A8F1F0080CDC4 /* ImageOCR.h */,
 				8D2B91D5177A8F1F0080CDC4 /* ImageOCR.m */,
+				8D2B9333177B5E990080CDC4 /* MealItem.h */,
+				8D2B9334177B5E990080CDC4 /* MealItem.m */,
+				8D2B9336177B73C30080CDC4 /* Check.h */,
+				8D2B9337177B73C30080CDC4 /* Check.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -988,6 +998,8 @@
 				0F024138177A776000FA5F0E /* SBGLNameDinersViewController.m in Sources */,
 				8D2B91D6177A8F1F0080CDC4 /* ImageOCR.m in Sources */,
 				8D2B9279177A9C230080CDC4 /* Tesseract.mm in Sources */,
+				8D2B9335177B5E990080CDC4 /* MealItem.m in Sources */,
+				8D2B9338177B73C40080CDC4 /* Check.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

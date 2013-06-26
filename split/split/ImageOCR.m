@@ -40,9 +40,9 @@ Assumes the image encodes one price.
         NSDecimalNumber *price = [NSDecimalNumber decimalNumberWithString:recognizedText];
     
         if (price) {
-            NSDecimalNumberHandler *handler = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain scale:-2 raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];
+            NSDecimalNumberHandler *handler = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain scale:2 raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];
             
-            return price;
+            return [price decimalNumberByRoundingAccordingToBehavior:handler ];
         } else {
             return nil;
         }
