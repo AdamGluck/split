@@ -109,7 +109,9 @@
 -(void) grabImageInHighlightedView{
     
     if (highlighted){
-        UIImage * checkImage = self.checkImageView.image;
+        UIImage * digitImage = [UIImage imageWithCGImage:CGImageCreateWithImageInRect([self.checkImageView.image CGImage], self.activeHighlight.frame)];
+        self.keyPriceValuePeopleWhoOweIt[@"name"] = digitImage;
+
     }
         
 }
