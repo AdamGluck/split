@@ -14,10 +14,21 @@
 
 @implementation SBGLImageViewController
 
+@synthesize names = _names;
+
+-(NSArray *) names {
+    if (!_names)
+        _names = [[NSArray alloc] init];
+    
+    return _names;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    NSLog(@"%@", self.names);
 }
 
 - (void)didReceiveMemoryWarning

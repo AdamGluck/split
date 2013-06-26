@@ -10,4 +10,6 @@
 
 @interface SBGLImageViewController : UIViewController
 
+@property (strong, nonatomic) NSArray * names;
+
 @end

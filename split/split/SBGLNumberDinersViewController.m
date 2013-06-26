@@ -61,11 +61,9 @@
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
     if ([segue.identifier isEqualToString:@"send"]){
-        NSLog(@"sending with number %i", [self.numberField.text intValue]);
 
         ((SBGLNameDinersViewController * )segue.destinationViewController).numberOfDiners = [[NSNumber alloc] initWithInt:[self.numberField.text intValue]];
-        
-        NSLog(@"sending with number %i", ((SBGLNameDinersViewController * )segue.destinationViewController).numberOfDiners.intValue);
+
     }
     
 }
