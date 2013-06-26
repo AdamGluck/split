@@ -17,7 +17,7 @@
 		0F024125177A46E600FA5F0E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F024124177A46E600FA5F0E /* Default@2x.png */; };
 		0F024127177A46E600FA5F0E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F024126177A46E600FA5F0E /* Default-568h@2x.png */; };
 		0F02412A177A46E600FA5F0E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F024128177A46E600FA5F0E /* MainStoryboard.storyboard */; };
-		0F02412D177A46E600FA5F0E /* SBGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F02412C177A46E600FA5F0E /* SBGLViewController.m */; };
+		0F02412D177A46E600FA5F0E /* SBGLImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F02412C177A46E600FA5F0E /* SBGLImageViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,8 +35,8 @@
 		0F024124177A46E600FA5F0E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		0F024126177A46E600FA5F0E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		0F024129177A46E600FA5F0E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		0F02412B177A46E600FA5F0E /* SBGLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBGLViewController.h; sourceTree = "<group>"; };
-		0F02412C177A46E600FA5F0E /* SBGLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SBGLViewController.m; sourceTree = "<group>"; };
+		0F02412B177A46E600FA5F0E /* SBGLImageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBGLImageViewController.h; sourceTree = "<group>"; };
+		0F02412C177A46E600FA5F0E /* SBGLImageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SBGLImageViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,8 +86,8 @@
 				0F02411F177A46E600FA5F0E /* SBGLAppDelegate.h */,
 				0F024120177A46E600FA5F0E /* SBGLAppDelegate.m */,
 				0F024128177A46E600FA5F0E /* MainStoryboard.storyboard */,
-				0F02412B177A46E600FA5F0E /* SBGLViewController.h */,
-				0F02412C177A46E600FA5F0E /* SBGLViewController.m */,
+				0F02412B177A46E600FA5F0E /* SBGLImageViewController.h */,
+				0F02412C177A46E600FA5F0E /* SBGLImageViewController.m */,
 				0F024117177A46E600FA5F0E /* Supporting Files */,
 			);
 			path = split;
@@ -176,7 +176,7 @@
 			files = (
 				0F02411D177A46E600FA5F0E /* main.m in Sources */,
 				0F024121177A46E600FA5F0E /* SBGLAppDelegate.m in Sources */,
-				0F02412D177A46E600FA5F0E /* SBGLViewController.m in Sources */,
+				0F02412D177A46E600FA5F0E /* SBGLImageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
