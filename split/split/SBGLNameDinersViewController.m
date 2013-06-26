@@ -17,6 +17,23 @@
 
 @implementation SBGLNameDinersViewController
 
+@synthesize names = _names;
+@synthesize textFields = _textFields;
+
+-(NSMutableArray *) names {
+    if (!_names)
+        _names = [[NSMutableArray alloc] init];
+    
+    return _names;
+}
+
+-(NSMutableArray *) textFields{
+    if (!_textFields)
+        _textFields = [[NSMutableArray alloc] init];
+    
+    return _textFields;
+}
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -29,6 +46,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -60,11 +78,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"nameCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    UITextField * field = (UITextField *)[cell viewWithTag:1];
     
+    [self.textFields addObject:field];
+        
     return cell;
 }
 

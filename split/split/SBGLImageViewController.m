@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 BGL. All rights reserved.
 //
 
-#import "SBGLViewController.h"
+#import "SBGLImageViewController.h"
 
 @interface SBGLImageViewController ()
 
 @end
 
-@implementation SBGLViewController
+@implementation SBGLImageViewController
 
 - (void)viewDidLoad
 {
