@@ -41,8 +41,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+    NSLog(@"view loaded with %@", self.names);
     self.checkImageView.image = [UIImage imageNamed:@"robust.jpg"];
+    [self configureTapGestureRecognizer];
     highlighted = NO;
 }
 
@@ -84,25 +85,22 @@
 #pragma mark - UIGestureRecognizer
 
 -(void) viewTapped: (UITapGestureRecognizer *) recognizer{
-    if (recognizer.state == UIGestureRecognizerStateBegan){
-        
-        if (!highlighted){
-            CGPoint location = [recognizer locationInView:self.view];
-            [self createHighlightAtLocation:location];
-        }
-        
-        if (highlighted){
-            
-        }
-        
-        
+    NSLog(@"tap recognized");
+    
+    if (!highlighted){
+        CGPoint location = [recognizer locationInView:self.view];
+        [self createHighlightAtLocation:location];
+    } else if (highlighted){
+        [self grabImageInHighlightedView];
     }
+        
 }
 
 -(void) createHighlightAtLocation: (CGPoint) location{
-    self.activeHighlight = [[UIView alloc] initWithFrame:CGRectMake(location.x, location.y, 30, 10)];
+    self.activeHighlight = [[UIView alloc] initWithFrame:CGRectMake(location.x - 10, location.y - 10, 30, 20)];
     UIColor * highlighter = [UIColor colorWithRed:250.0/255.0 green:245.0/255.0 blue:151.0/255.0 alpha:.6];
     self.activeHighlight.backgroundColor = highlighter;
+    [self.view insertSubview:self.activeHighlight aboveSubview:self.checkImageView];
     highlighted = YES;
 }
 
@@ -111,6 +109,8 @@
     if (highlighted){
         UIImage * digitImage = [UIImage imageWithCGImage:CGImageCreateWithImageInRect([self.checkImageView.image CGImage], self.activeHighlight.frame)];
         self.keyPriceValuePeopleWhoOweIt[@"name"] = digitImage;
+        [self.activeHighlight removeFromSuperview];
+        highlighted = NO;
 
     }
         

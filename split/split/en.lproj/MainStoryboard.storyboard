@@ -26,7 +26,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="r5f-h2-RVP"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="checkImage" destination="Iy2-pj-Iv3" id="aUY-kq-KrS"/>
+                        <outlet property="checkImageView" destination="Iy2-pj-Iv3" id="1Kj-32-Z3d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -211,6 +211,9 @@
         </class>
         <class className="SBGLImageViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SBGLImageViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="checkImageView" candidateClass="UIImageView"/>
+            </relationships>
         </class>
         <class className="SBGLNameDinersViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SBGLNameDinersViewController.h"/>
