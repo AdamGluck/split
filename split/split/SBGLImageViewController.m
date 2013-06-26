@@ -8,7 +8,7 @@
 
 #import "SBGLViewController.h"
 
-@interface SBGLViewController ()
+@interface SBGLImageViewController ()
 
 @end
 

@@ -1,5 +1,5 @@
 //
-//  SBGLViewController.h
+//  SBGLNumberDinersViewController.h
 //  split
 //
 //  Created by Adam Gluck on 6/25/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SBGLImageViewController : UIViewController
+@interface SBGLNumberDinersViewController : UITableViewController
 
 @end
