@@ -11,8 +11,7 @@
 
 @implementation ImageOCR
 
-//@property (strong, nonatomic) UIImage *digitImage;
-//@property (strong, nonatomic) NSNumber *digitNumber;
+@synthesize digitNumber = _digitNumber;
 
 - (ImageOCR *)initWithImage:(UIImage *)digitImage
 {
@@ -62,6 +61,7 @@ Assumes the image encodes one price.
 - (NSDecimalNumber *)digitNumber
 {
     if (!_digitNumber) _digitNumber = [self parseImage:self.digitImage];
+
     return _digitNumber;
 }
 
