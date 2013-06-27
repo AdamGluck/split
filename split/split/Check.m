@@ -11,6 +11,7 @@
 @interface Check()
 
 @property (strong, nonatomic) NSDecimalNumberHandler *priceHandler;
+
 @end
 
 @implementation Check
@@ -42,6 +43,7 @@
     NSMutableDictionary *amountsDict = [[NSMutableDictionary alloc] init];
     float totalFoodCost = 0.0;
     
+    
     // First, add meal items
     for (MealItem *item in self.mealItems){
         float itemPrice = item.price;
@@ -51,17 +53,21 @@
         
         for (NSString *name in peopleWhoAteItem) {
             float amountOwed = itemPrice / numPeople;
+            
             NSNumber *currentAmountOwed = [amountsDict objectForKey:name];
             if (currentAmountOwed){
                 amountsDict[name] = [NSNumber numberWithFloat:amountOwed + currentAmountOwed.floatValue];
             } else {
-                amountsDict[name] = [NSNumber numberWithFloat:0.0];
+                amountsDict[name] = [NSNumber numberWithFloat:amountOwed];
             }
         }
     }
     
+    
     // Then, add tax and tip information
     float totalTip = (totalFoodCost + self.tax.floatValue) * (self.tipPercentage / 100);
+    
+    NSMutableDictionary * newAmountsDict = [[NSMutableDictionary alloc] init];
     
     for (NSString *person in amountsDict){
         float foodCost = ((NSNumber *)amountsDict[person]).floatValue;
@@ -71,10 +77,10 @@
         float totalOwed = foodCost + fractionTax + fractionTip;
         NSDecimalNumber *totalOwed_unformatted = [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithFloat:totalOwed]decimalValue]];
         NSDecimalNumber *totalOwed_formatted = [totalOwed_unformatted decimalNumberByRoundingAccordingToBehavior:self.priceHandler];
-        amountsDict[person] = totalOwed_formatted;
+        newAmountsDict[person] = totalOwed_formatted;
     }
     
-    return [amountsDict copy];
+    return [newAmountsDict copy];
 }
 
 

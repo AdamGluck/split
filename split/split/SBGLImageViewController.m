@@ -9,9 +9,13 @@
 #import "SBGLImageViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ImageOCR.h"
+#import "MealItem.h"
+#import "Check.h"
+#import "SBGLPresentDataViewController.h"
 
 @interface SBGLImageViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate>{
     BOOL highlighted;
+    BOOL tax;
     CGPoint highlightStart;
 }
 
@@ -22,6 +26,7 @@
 @property (strong, nonatomic) NSMutableArray * items; // each item is a dictionary key = price, value = array of people
 @property (strong, nonatomic) NSMutableArray * selectedPeople;
 @property (strong, nonatomic) UIImageView * activeHighlight;
+@property (strong, nonatomic) NSDecimalNumber * taxAmount;
 
 @end
 
@@ -172,10 +177,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    if ((!cell.accessoryView || cell.accessoryView.hidden) && indexPath.section != 0){
+    if (indexPath.row == 1 && indexPath.section == 0 && cell.accessoryView.hidden){
+        
+        tax = YES;
+        cell.accessoryView.hidden = NO;
+        
+    } else if (cell.accessoryView.hidden && indexPath.section != 0){
+        
+        // this works because the rows are indexed by 
         [self.selectedPeople addObject: self.names[indexPath.row]];
         
         if (cell.accessoryView.hidden){
@@ -189,6 +200,8 @@
     } else {
         [self.selectedPeople removeObject: self.names[indexPath.row]];
         cell.accessoryView.hidden = YES;
+
+        if (tax) tax = NO;
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -210,7 +223,7 @@
     // Return the number of rows in the section.
     
     if (section == 0)
-        return 1;
+        return 2;
     else
         return [self.names count];
     
@@ -220,7 +233,7 @@
 {
     NSString *CellIdentifier = @"nameCell";
 
-    if (indexPath.section == 0){
+    if (indexPath.section == 0 && indexPath.row == 0){
         CellIdentifier = @"amount";
     }
     
@@ -233,20 +246,26 @@
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor whiteColor];
     
-    if (indexPath.section == 0 && highlighted){
+    if (indexPath.section == 0 && indexPath.row == 0 && highlighted){
         UIImage * image = [self grabImageInHighlightedView];
+        
         if (image){
-            NSLog(@"image");
             ImageOCR * parsedImage = [[ImageOCR alloc] initWithImage:image];
-            self.amountField = (UITextField *)
-            [cell viewWithTag:1];
+            self.amountField = (UITextField *)[cell viewWithTag:1];
             self.amountField.text = [NSString stringWithFormat:@"%@", parsedImage.digitNumber];
         }
-    }
-    
-    if (indexPath.section == 1){
-        cell.textLabel.text = self.names[indexPath.row];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    } else {
+        UIImageView *checkmark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
+        checkmark.image = [UIImage imageNamed:@"check-mark-in-white-md.png"];
+        cell.accessoryView = checkmark;
+        
+        if (indexPath.section == 0 && indexPath.row == 1)
+            cell.textLabel.text = @"Tax";
+        else if (indexPath.section == 1)
+            cell.textLabel.text = self.names[indexPath.row];
+        
+        cell.accessoryView.hidden = YES;
+
     }
     
     return cell;
@@ -287,25 +306,25 @@
 
 -(void) dismissTableView{
     
-    NSLog(@"dismiss table view called");
-    
     // grab relevent data and add it to self.items which will be sent to model
-    
-    NSString * priceForItem = self.amountField.text;
-    
-    NSLog(@"priceForItem %@", priceForItem);
-    NSArray * selectedPeopleForItem = [self.selectedPeople copy];
-    
-    NSLog(@"selected people for item %@", selectedPeopleForItem);
-    
-    NSDictionary * itemPersonMap = @{priceForItem: selectedPeopleForItem};
-    
-    NSLog(@"itemPersonMap = %@", itemPersonMap);
-    
-    [self.items addObject:itemPersonMap];
+    if ([self.selectedPeople count]){
+        NSString * priceForItem = self.amountField.text;
+        NSMutableArray * selectedPeopleForItem = [self.selectedPeople copy];
+        MealItem * item = [[MealItem alloc] init];
+        item.price = [priceForItem floatValue];
+        item.peopleWhoAteItem = selectedPeopleForItem;
+        
+        NSLog(@"item.price = %f, item.peopleWhoAteItem = %@", item.price, item.peopleWhoAteItem);
+        [self.items addObject:item];
+        
+        NSLog(@"items %@", self.items);
+        
+    } else if (tax){
+        self.taxAmount = [NSDecimalNumber decimalNumberWithString:self.amountField.text];
+        tax = NO;
+    }
     
     // clear out self.selectedPeople so that we do not keep adding to it
-    
     [self.selectedPeople removeAllObjects];
     
     // clean up table
@@ -315,7 +334,21 @@
     
     [self.nameTable reloadData];
     
-    NSLog(@"itemPersonMap = %@", self.items);
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"present"]){
+        
+        Check * check = [[Check alloc] initWithMealItems:self.items people:[self.names mutableCopy] tax:self.taxAmount tipPercentage:20.0];
+
+        NSDictionary * amounts = [[check calculateAmounts] mutableCopy];
+        
+        NSLog(@"amounts = %@", amounts);
+        ((SBGLPresentDataViewController*) segue.destinationViewController).presentedData = [[NSMutableDictionary alloc] initWithDictionary:amounts];
+        
+        NSLog(@"data before segue %@", ((SBGLPresentDataViewController *) segue.destinationViewController).presentedData);
+        
+    }
 }
 
 

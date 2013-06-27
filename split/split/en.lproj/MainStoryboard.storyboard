@@ -4,6 +4,62 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
+        <!--Present Data View Controller-->
+        <scene sceneID="UsN-Th-cCM">
+            <objects>
+                <tableViewController id="Oga-2P-yct" customClass="SBGLPresentDataViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="U2W-UV-F94">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="presentCell" id="1R7-hS-VNh">
+                                <rect key="frame" x="0.0" y="46" width="320" height="46"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q3s-Tn-3UJ">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="29" id="EPg-l3-m9v"/>
+                                                <constraint firstAttribute="width" constant="130" id="ubS-Bg-luq"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pm1-ak-FRk">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="29" id="5gw-Eb-R7E"/>
+                                                <constraint firstAttribute="width" constant="113" id="kX2-jn-8Pm"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="q3s-Tn-3UJ" firstAttribute="centerY" secondItem="1R7-hS-VNh" secondAttribute="centerY" type="default" id="4Ha-Zu-ckK"/>
+                                    <constraint firstItem="pm1-ak-FRk" firstAttribute="leading" secondItem="1R7-hS-VNh" secondAttribute="leading" constant="30" id="9ig-RQ-otr"/>
+                                    <constraint firstItem="pm1-ak-FRk" firstAttribute="top" secondItem="1R7-hS-VNh" secondAttribute="top" constant="8" id="HgZ-nG-Jr7"/>
+                                    <constraint firstItem="q3s-Tn-3UJ" firstAttribute="baseline" secondItem="pm1-ak-FRk" secondAttribute="baseline" type="default" id="bno-Xa-ib0"/>
+                                    <constraint firstAttribute="trailing" secondItem="q3s-Tn-3UJ" secondAttribute="trailing" constant="30" id="pYv-70-sgw"/>
+                                </constraints>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="Oga-2P-yct" id="Vba-oq-Zbo"/>
+                            <outlet property="delegate" destination="Oga-2P-yct" id="5kd-cp-Mjj"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nXB-7g-1OW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-251" y="-801"/>
+        </scene>
         <!--Image View Controller-->
         <scene sceneID="5">
             <objects>
@@ -92,7 +148,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="RIk-6w-pnV">
-                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="r5f-h2-RVP"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="r5f-h2-RVP">
+                            <connections>
+                                <segue destination="Oga-2P-yct" kind="push" identifier="present" id="0Ya-wc-BLw"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="checkImageView" destination="Iy2-pj-Iv3" id="1Kj-32-Z3d"/>
@@ -295,6 +355,9 @@
             <relationships>
                 <relationship kind="outlet" name="numberField" candidateClass="UITextField"/>
             </relationships>
+        </class>
+        <class className="SBGLPresentDataViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SBGLPresentDataViewController.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

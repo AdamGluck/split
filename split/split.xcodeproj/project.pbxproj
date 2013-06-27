@@ -22,6 +22,9 @@
 		0F024138177A776000FA5F0E /* SBGLNameDinersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F024137177A776000FA5F0E /* SBGLNameDinersViewController.m */; };
 		0F55B030177AD34000A26DB6 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 0F55B02F177AD34000A26DB6 /* tessdata */; };
 		0F55B032177B925E00A26DB6 /* check-mark-in-white-md.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F55B031177B925E00A26DB6 /* check-mark-in-white-md.png */; };
+		0F55B035177BA8FD00A26DB6 /* MealItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F55B034177BA8FD00A26DB6 /* MealItem.m */; };
+		0F55B038177BA90F00A26DB6 /* Check.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F55B037177BA90F00A26DB6 /* Check.m */; };
+		0F55B03B177BE1CF00A26DB6 /* SBGLPresentDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F55B03A177BE1CE00A26DB6 /* SBGLPresentDataViewController.m */; };
 		0F603432177AAD98005D33A5 /* Tesseract.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F603397177AAD98005D33A5 /* Tesseract.mm */; };
 		0F603433177AAD98005D33A5 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 0F603398177AAD98005D33A5 /* LICENSE */; };
 		0F603435177AAD98005D33A5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0F60339B177AAD98005D33A5 /* .gitignore */; };
@@ -54,6 +57,12 @@
 		0F024137177A776000FA5F0E /* SBGLNameDinersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBGLNameDinersViewController.m; sourceTree = "<group>"; };
 		0F55B02F177AD34000A26DB6 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
 		0F55B031177B925E00A26DB6 /* check-mark-in-white-md.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check-mark-in-white-md.png"; sourceTree = "<group>"; };
+		0F55B033177BA8FD00A26DB6 /* MealItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealItem.h; sourceTree = "<group>"; };
+		0F55B034177BA8FD00A26DB6 /* MealItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealItem.m; sourceTree = "<group>"; };
+		0F55B036177BA90F00A26DB6 /* Check.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Check.h; sourceTree = "<group>"; };
+		0F55B037177BA90F00A26DB6 /* Check.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Check.m; sourceTree = "<group>"; };
+		0F55B039177BE1CE00A26DB6 /* SBGLPresentDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBGLPresentDataViewController.h; sourceTree = "<group>"; };
+		0F55B03A177BE1CE00A26DB6 /* SBGLPresentDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBGLPresentDataViewController.m; sourceTree = "<group>"; };
 		0F603396177AAD98005D33A5 /* Tesseract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tesseract.h; sourceTree = "<group>"; };
 		0F603397177AAD98005D33A5 /* Tesseract.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Tesseract.mm; sourceTree = "<group>"; };
 		0F603398177AAD98005D33A5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -264,6 +273,8 @@
 				0F02411F177A46E600FA5F0E /* SBGLAppDelegate.h */,
 				0F024120177A46E600FA5F0E /* SBGLAppDelegate.m */,
 				0F024128177A46E600FA5F0E /* MainStoryboard.storyboard */,
+				0F55B039177BE1CE00A26DB6 /* SBGLPresentDataViewController.h */,
+				0F55B03A177BE1CE00A26DB6 /* SBGLPresentDataViewController.m */,
 				0F024136177A776000FA5F0E /* SBGLNameDinersViewController.h */,
 				0F024137177A776000FA5F0E /* SBGLNameDinersViewController.m */,
 				0F024133177A772200FA5F0E /* SBGLNumberDinersViewController.h */,
@@ -501,6 +512,10 @@
 			children = (
 				8D2B91D4177A8F1F0080CDC4 /* ImageOCR.h */,
 				8D2B91D5177A8F1F0080CDC4 /* ImageOCR.m */,
+				0F55B036177BA90F00A26DB6 /* Check.h */,
+				0F55B037177BA90F00A26DB6 /* Check.m */,
+				0F55B033177BA8FD00A26DB6 /* MealItem.h */,
+				0F55B034177BA8FD00A26DB6 /* MealItem.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -583,6 +598,9 @@
 				0F024138177A776000FA5F0E /* SBGLNameDinersViewController.m in Sources */,
 				8D2B91D6177A8F1F0080CDC4 /* ImageOCR.m in Sources */,
 				0F603432177AAD98005D33A5 /* Tesseract.mm in Sources */,
+				0F55B035177BA8FD00A26DB6 /* MealItem.m in Sources */,
+				0F55B038177BA90F00A26DB6 /* Check.m in Sources */,
+				0F55B03B177BE1CF00A26DB6 /* SBGLPresentDataViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
