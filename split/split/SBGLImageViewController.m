@@ -16,6 +16,7 @@
 @interface SBGLImageViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate>{
     BOOL highlighted;
     BOOL tax;
+    BOOL shouldReloadForNewItem; // set this before reloading the tableview if you want the check marks to go away
     CGPoint highlightStart;
 }
 
@@ -27,6 +28,8 @@
 @property (strong, nonatomic) NSMutableArray * selectedPeople;
 @property (strong, nonatomic) UIImageView * activeHighlight;
 @property (strong, nonatomic) NSDecimalNumber * taxAmount;
+@property (strong, nonatomic) NSDictionary * currentAmountOwedPerPerson;
+@property (strong, nonatomic) NSString * currentAmount;
 
 @end
 
@@ -35,6 +38,14 @@
 @synthesize names = _names;
 @synthesize items = _items;
 @synthesize selectedPeople = _selectedPeople;
+@synthesize currentAmountOwedPerPerson = _currentAmountOwedPerPerson;
+
+-(NSDictionary *) currentAmountOwedPerPerson{
+    if (!_currentAmountOwedPerPerson)
+        _currentAmountOwedPerPerson = [[NSDictionary alloc] init];
+    
+    return _currentAmountOwedPerPerson;
+}
 
 -(NSArray *) names {
     if (!_names)
@@ -61,19 +72,26 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    NSLog(@"view loaded with %@", self.names);
     
     self.checkImageView.image = [UIImage imageNamed:@"robust.jpg"];
     [self configureTapGestureRecognizer];
     [self configurePanGestureRecognizer];
+    [self configureTableView];
     highlighted = NO;
-    
+
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    shouldReloadForNewItem = YES;
+}
+
+-(void) configureTableView{
     self.nameTable.backgroundColor = [UIColor clearColor];
     
-    UIView * footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.nameTable.frame.size.width, self.view.frame.size.height)];
+    CGFloat offset =  (float)([self.names count] + 1) * 44;
+    UIView * footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.nameTable.frame.size.width, self.view.frame.size.height - offset)];
     footerView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.6f];
     self.nameTable.tableFooterView = footerView;
-
 }
 
 -(void) configureTapGestureRecognizer{
@@ -119,7 +137,7 @@
 
 #pragma mark - UIGestureRecognizer
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     
     if ([gestureRecognizer class] == [UIPanGestureRecognizer class]){
         highlightStart = [touch locationInView:self.checkImageView];
@@ -129,6 +147,12 @@
 }
 
 -(void) viewPanned: (UIPanGestureRecognizer *) recognizer {
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan){
+        if (highlighted){
+            [self grabInformationFromTableViewAndClearIt];
+        }
+    }
     
     if (recognizer.state == UIGestureRecognizerStateChanged){
         CGPoint location = [recognizer locationInView:self.checkImageView];
@@ -145,12 +169,15 @@
     
     
 }
+
 -(void) viewTapped: (UITapGestureRecognizer *) recognizer{
     
     if (highlighted){
-        [self dismissTableView];
+        [self grabInformationFromTableViewAndClearIt];
     }
-        
+    
+    [self.view endEditing:YES];
+    
 }
 
 -(void) createHighlightAtLocation: (CGPoint) location withSize: (CGSize) size{
@@ -172,40 +199,52 @@
 }
 
 
-
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    if (indexPath.row == 1 && indexPath.section == 0 && cell.accessoryView.hidden){
-        
+    
+    if (indexPath.row == 1 && indexPath.section == 0 && !tax){
         tax = YES;
-        cell.accessoryView.hidden = NO;
         
     } else if (cell.accessoryView.hidden && indexPath.section != 0){
         
-        // this works because the rows are indexed by 
         [self.selectedPeople addObject: self.names[indexPath.row]];
         
-        if (cell.accessoryView.hidden){
-            cell.accessoryView.hidden = NO;
-        } else {
-            UIImageView *checkmark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
-            checkmark.image = [UIImage imageNamed:@"check-mark-in-white-md.png"];
-            cell.accessoryView = checkmark;
-        }
+    } else if (indexPath.row == 1 && indexPath.section == 0 && tax){
+        
+        tax = NO;
         
     } else {
+        
         [self.selectedPeople removeObject: self.names[indexPath.row]];
-        cell.accessoryView.hidden = YES;
-
-        if (tax) tax = NO;
+        
     }
+    
+    
+    NSMutableArray *tempItems = [self.items mutableCopy];
+    
+    if (([self.selectedPeople count] || tax) && [self numberFromHighlightedView].intValue){
+        
+        MealItem *tempItem = [[MealItem alloc] init];
+        tempItem.price = [self numberFromHighlightedView].floatValue;
+        tempItem.peopleWhoAteItem = [self.selectedPeople copy];
+            
+        [tempItems addObject: tempItem];
+        
+    } else if (tax){
+        self.taxAmount = [self numberFromHighlightedView];
+    }
+    
+    Check * check = [[Check alloc] initWithMealItems:tempItems people:[self.names mutableCopy] tax:self.taxAmount tipPercentage:0.0];
+    self.currentAmountOwedPerPerson = [check calculateAmounts];
+    
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    [self.nameTable reloadData];
     
 }
 
@@ -245,30 +284,86 @@
     cell.backgroundView = backGroundView;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor whiteColor];
+    cell.accessoryView.hidden = YES;
     
-    if (indexPath.section == 0 && indexPath.row == 0 && highlighted){
-        UIImage * image = [self grabImageInHighlightedView];
+    // the code below should probably be restructured
+    if (indexPath.section == 0 && indexPath.row == 0){
         
-        if (image){
-            ImageOCR * parsedImage = [[ImageOCR alloc] initWithImage:image];
-            self.amountField = (UITextField *)[cell viewWithTag:1];
-            self.amountField.text = [NSString stringWithFormat:@"%@", parsedImage.digitNumber];
-        }
+        [self configureAmountFieldCell:cell];
+        
     } else {
+        // this is in all the rest beside the first row
         UIImageView *checkmark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
         checkmark.image = [UIImage imageNamed:@"check-mark-in-white-md.png"];
         cell.accessoryView = checkmark;
         
-        if (indexPath.section == 0 && indexPath.row == 1)
-            cell.textLabel.text = @"Tax";
-        else if (indexPath.section == 1)
-            cell.textLabel.text = self.names[indexPath.row];
+        //this is the location of the "Tax Field"
+        if (indexPath.section == 0 && indexPath.row == 1){
+            
+            cell = [self configureCellForTaxRow:cell];
+
+        } else if (indexPath.section == 1){
+            
+            cell = [self configureCellForNameRow:cell atIndexPath:indexPath];
+            
+        }
         
-        cell.accessoryView.hidden = YES;
 
     }
     
     return cell;
+}
+
+-(void) configureAmountFieldCell:(UITableViewCell *) cell{
+    UIImage * image = [self grabImageInHighlightedView];
+    
+    if (image){
+        ImageOCR * parsedImage = [[ImageOCR alloc] initWithImage:image];
+        self.amountField = (UITextField *)[cell viewWithTag:1];
+        self.amountField.text = [NSString stringWithFormat:@"$%.02f", parsedImage.digitNumber.floatValue];
+    }
+}
+
+-(UITableViewCell *) configureCellForTaxRow: (UITableViewCell *) cell{
+    cell.textLabel.text = @"Tax";
+    
+    if (self.taxAmount)
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"+$%.02f", self.taxAmount.floatValue];
+    else
+        cell.detailTextLabel.text = @"$0.00";
+    
+    cell.accessoryView.hidden = YES;
+    
+    return cell;
+}
+
+-(UITableViewCell *) configureCellForNameRow: (UITableViewCell *) cell atIndexPath: (NSIndexPath *) indexPath {
+    
+    NSString * name = self.names[indexPath.row];
+    cell.textLabel.text = name;
+    
+    if (self.currentAmountOwedPerPerson[name])
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.02f", ((NSDecimalNumber *) self.currentAmountOwedPerPerson[name]).floatValue];
+    else
+        cell.detailTextLabel.text = @"$0.00";
+    
+    if ([self shouldSetAccessoryViewForName:name]) {
+        cell.accessoryView.hidden = NO;
+    } else {
+        cell.accessoryView.hidden = YES;
+    }
+    
+    return cell;
+}
+
+-(BOOL) shouldSetAccessoryViewForName: (NSString *) name{
+    
+    for (NSString * selectedName in self.selectedPeople){
+        if ([selectedName isEqualToString:name])
+            return YES;
+    }
+    
+    return NO;
 }
 
 #pragma mark - UITableView utility functions
@@ -302,51 +397,74 @@
     
 }
 
+-(NSDecimalNumber *) numberFromHighlightedView{
+    UIImage * image = [self grabImageInHighlightedView];
+    
+    if (image){
+        ImageOCR * parsedImage = [[ImageOCR alloc] initWithImage:image];
+        return parsedImage.digitNumber;
+    }
+    
+    return [NSDecimalNumber decimalNumberWithString:@"0.00"];
+}
 
 
--(void) dismissTableView{
+
+-(void) grabInformationFromTableViewAndClearIt{
     
     // grab relevent data and add it to self.items which will be sent to model
-    if ([self.selectedPeople count]){
-        NSString * priceForItem = self.amountField.text;
+    // the first if makes sure that there is relevent information to grab
+
+    
+    NSString * number = self.amountField.text;
+    NSString * amount = [number stringByReplacingOccurrencesOfString:@"[^0-9.]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [number length])];
+    
+    NSLog(@"%@ amount", amount);
+    if ([self.selectedPeople count] && amount.floatValue){
         NSMutableArray * selectedPeopleForItem = [self.selectedPeople copy];
         MealItem * item = [[MealItem alloc] init];
-        item.price = [priceForItem floatValue];
+        item.price =  amount.floatValue;
         item.peopleWhoAteItem = selectedPeopleForItem;
         
-        NSLog(@"item.price = %f, item.peopleWhoAteItem = %@", item.price, item.peopleWhoAteItem);
         [self.items addObject:item];
         
-        NSLog(@"items %@", self.items);
         
     } else if (tax){
-        self.taxAmount = [NSDecimalNumber decimalNumberWithString:self.amountField.text];
+        self.taxAmount = [NSDecimalNumber decimalNumberWithString:amount];
         tax = NO;
     }
     
+    Check * check = [[Check alloc] initWithMealItems:self.items people:[self.names mutableCopy] tax:self.taxAmount tipPercentage:0.0];
+    self.currentAmountOwedPerPerson = [check calculateAmounts];
+        
     // clear out self.selectedPeople so that we do not keep adding to it
     [self.selectedPeople removeAllObjects];
     
-    // clean up table
-    self.nameTable.hidden = YES;
+    // remove highlight from view
     [self.activeHighlight removeFromSuperview];
-    highlighted = NO;
     
+    // note that there is no current highlight
+    highlighted = NO;
+        
+    // reload data to reflect changes
     [self.nameTable reloadData];
     
+}
+
+-(void) shouldReloadForNewItem: (NSNumber *) new{
+    shouldReloadForNewItem = new.boolValue;
+    [self.nameTable reloadData];
+
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([segue.identifier isEqualToString:@"present"]){
         
-        Check * check = [[Check alloc] initWithMealItems:self.items people:[self.names mutableCopy] tax:self.taxAmount tipPercentage:20.0];
-
-        NSDictionary * amounts = [[check calculateAmounts] mutableCopy];
+        // grabs the last information
+        if (highlighted)
+            [self grabInformationFromTableViewAndClearIt];
         
-        NSLog(@"amounts = %@", amounts);
-        ((SBGLPresentDataViewController*) segue.destinationViewController).presentedData = [[NSMutableDictionary alloc] initWithDictionary:amounts];
-        
-        NSLog(@"data before segue %@", ((SBGLPresentDataViewController *) segue.destinationViewController).presentedData);
+        ((SBGLPresentDataViewController*) segue.destinationViewController).presentedData = [self.currentAmountOwedPerPerson mutableCopy];
         
     }
 }
